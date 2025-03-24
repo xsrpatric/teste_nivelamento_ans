@@ -55,8 +55,3 @@ Commit e Push para o GitHub
 
 ![image](https://github.com/user-attachments/assets/a1b434d9-989a-463d-bf7c-631e9219974b)
 
-
-
-
-
-## Web Scrapting 
