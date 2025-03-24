@@ -1,0 +1,22 @@
+ 
+  
+# Python  
+__pycache__/  
+*.pyc  
+*.pyo  
+*.pyd  
+venv/  
+
+# Banco de Dados  
+*.sqlite3  
+*.db  
+
+# Logs  
+logs/  
+*.log  
+
+# Compactados  
+*.zip  
+*.rar  
+*.tar.gz  
+
