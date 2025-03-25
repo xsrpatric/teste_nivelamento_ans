@@ -9,8 +9,8 @@ from tqdm import tqdm
 
 # URL da página onde estão os PDFs
 URL = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
-PASTA_DOWNLOADS = "web_scraping/pdfs"
-NOME_ZIP = "web_scraping/anexos.zip"
+pasta_download = "web_scraping/pdfs"
+nomes_ZIP = "web_scraping/anexos.zip"
 
 # Criar a pasta de downloads se não existir
 os.makedirs(PASTA_DOWNLOADS, exist_ok=True)
