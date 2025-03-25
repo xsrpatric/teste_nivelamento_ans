@@ -32,4 +32,3 @@ def baixar_arquivo(url, nome_arquivo):
 
 # Exemplo de chamada
 baixar_arquivo(URL, nome_zip)
-
