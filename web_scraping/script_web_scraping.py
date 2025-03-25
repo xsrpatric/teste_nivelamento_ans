@@ -1,5 +1,3 @@
-# Web Scraping
-
 ~~~python
 import os
 import requests
