@@ -28,6 +28,7 @@ def baixar_arquivo(url, nome_arquivo):
                  if chunk:
                     arquivo.write(chunk)
                     barra.update(len(chunk))
+
         print(f"[+] Download concluído: {nome_arquivo}")
     else:
         print(f"[-] Erro ao baixar {url} (Status {resposta.status_code})")
