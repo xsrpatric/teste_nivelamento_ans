@@ -14,10 +14,10 @@ nome_zip = "web_scraping/anexos.zip"
 # Criar a pasta de downloads se não existir
 os.makedirs(pasta_downloads, exist_ok=True)
 
-#Baixa um arquivo da URL e salva localmente. """
+#Baixa um arquivo da URL e salva localmente.
 def baixar_arquivo(url, nome_arquivo):
 
-# Verifica se a resposta foi bem-sucedida ****
+# Verifica se a resposta foi bem-sucedida 
     resposta = requests.get(url, stream=True)
     tamanho_total = int(resposta.headers.get('content-length', 0))
 
