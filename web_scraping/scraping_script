@@ -6,31 +6,52 @@ from tqdm import tqdm
 # URL da página onde estão os PDFs
 URL = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
 pasta_downloads = "web_scraping/pdfs"
-nome_zip = "web_scraping/anexos.zip"
 
 # Criar a pasta de downloads se não existir
 os.makedirs(pasta_downloads, exist_ok=True)
 
-def baixar_arquivo(url, nome_arquivo):
+def baixar_arquivo(url, caminho_arquivo):
     """
     Baixa um arquivo da URL e salva localmente.
     """
     resposta = requests.get(url, stream=True)
-    
-    # Verifica se a resposta foi bem-sucedida
+
     if resposta.status_code == 200:
         tamanho_total = int(resposta.headers.get('content-length', 0))
         
-        with open(nome_arquivo, "wb") as arquivo, tqdm(
-            total=tamanho_total, unit="B", unit_scale=True, desc=nome_arquivo
+        with open(caminho_arquivo, "wb") as arquivo, tqdm(
+            total=tamanho_total, unit="B", unit_scale=True, desc=caminho_arquivo
         ) as barra:
             for chunk in resposta.iter_content(chunk_size=1024):
                 if chunk:
                     arquivo.write(chunk)
                     barra.update(len(chunk))
-        print(f"[+] Download concluído: {nome_arquivo}")
+        print(f"[+] Download concluído: {caminho_arquivo}")
     else:
         print(f"[-] Erro ao baixar {url} (Status {resposta.status_code})")
 
-# Exemplo de chamada
-baixar_arquivo(URL, nome_zip)
+# Função para extrair links dos PDFs da página
+def encontrar_links_pdfs(url_pagina):
+    resposta = requests.get(url_pagina)
+    soup = BeautifulSoup(resposta.text, "html.parser")
+    
+    # Encontrar todos os links que terminam com .pdf
+    links = [a["href"] for a in soup.find_all("a", href=True) if a["href"].endswith(".pdf")]
+    
+    # Corrigir URLs relativas
+    links_corrigidos = []
+    for link in links:
+        if link.startswith("http"):
+            links_corrigidos.append(link)
+        else:
+            links_corrigidos.append("https://www.gov.br" + link)
+
+    return links_corrigidos
+
+# Buscar os links dos PDFs na página
+links_pdfs = encontrar_links_pdfs(URL)
+
+# Fazer o download de cada PDF
+for link in links_pdfs:
+    nome_arquivo = os.path.join(pasta_downloads, os.path.basename(link))
+    baixar_arquivo(link, nome_arquivo)
