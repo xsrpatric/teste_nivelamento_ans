@@ -5,15 +5,15 @@ from tqdm import tqdm
 
 # URL da página onde estão os PDFs
 URL = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
-pasta_downloads = "web_scraping/pdfs"
+pasta_downloads = "Arquivos/zip"
 
 # Criar a pasta de downloads se não existir
 os.makedirs(pasta_downloads, exist_ok=True)
 
 def baixar_arquivo(url, caminho_arquivo):
-    """
-    Baixa um arquivo da URL e salva localmente.
-    """
+    
+#Baixa um arquivo da URL e salva localmente.
+    
     resposta = requests.get(url, stream=True)
 
     if resposta.status_code == 200:
@@ -35,10 +35,10 @@ def encontrar_links_pdfs(url_pagina):
     resposta = requests.get(url_pagina)
     soup = BeautifulSoup(resposta.text, "html.parser")
     
-    # Encontrar todos os links que terminam com .pdf
+# Encontrar todos os links que terminam com .pdf
     links = [a["href"] for a in soup.find_all("a", href=True) if a["href"].endswith(".pdf")]
-    
-    # Corrigir URLs relativas
+
+# Corrigir URLs relativas
     links_corrigidos = []
     for link in links:
         if link.startswith("http"):
@@ -46,7 +46,15 @@ def encontrar_links_pdfs(url_pagina):
         else:
             links_corrigidos.append("https://www.gov.br" + link)
 
-    return links_corrigidos
+# Filtrar apenas PDFs desejados (modifique os termos conforme necessário)
+    palavras_chave = ["consulta", "rol", "procedimentos"]
+    links_filtrados = [link for link in links_corrigidos if any(palavra in link.lower() for palavra in palavras_chave)]
+
+    print("\n PDFs encontrados:")
+    for link in links_filtrados:
+        print(f" - {link}")
+
+    return links_filtrados
 
 # Buscar os links dos PDFs na página
 links_pdfs = encontrar_links_pdfs(URL)
@@ -54,4 +62,11 @@ links_pdfs = encontrar_links_pdfs(URL)
 # Fazer o download de cada PDF
 for link in links_pdfs:
     nome_arquivo = os.path.join(pasta_downloads, os.path.basename(link))
+    
+# Evita baixar duplicados
+    if os.path.exists(nome_arquivo):
+        print(f"Arquivo já existe, pulando: {nome_arquivo}")
+        continue
+
     baixar_arquivo(link, nome_arquivo)
+
