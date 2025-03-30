@@ -11,7 +11,7 @@ zip_path = "Teste_seu_nome.zip"
 # Lista para armazenar as tabelas extraídas
 dataframes = []
 
-# Abrindo o PDF e extraindo tabelas
+# Abrindo o PDF e extraindo tabela
 with pdfplumber.open(pdf_path) as pdf:
     for page in pdf.pages:
         tables = page.extract_table()
